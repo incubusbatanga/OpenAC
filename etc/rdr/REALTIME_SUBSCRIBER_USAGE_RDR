@@ -1,0 +1,16 @@
+
+rdr REALTIME_SUBSCRIBER_USAGE_RDR tag 0xF0F0F002
+    rdr_field SUBSCRIBER_ID 			1
+    rdr_field PACKAGE_ID			2
+    rdr_field SERVICE_USAGE_COUNTER_ID		3
+    rdr_field AGGREGATION_OBJECT_ID		4
+    rdr_field BREACH_STATE			5
+    rdr_field REASON				6
+    rdr_field CONFIGURED_DURATION		7
+    rdr_field DURATION				8
+    rdr_field END_TIME				9
+    rdr_field UPSTREAM_VOLUME			10
+    rdr_field DOWNSTREAM_VOLUME			11
+    rdr_field SESSIONS				12
+    rdr_field SECONDS				13
+

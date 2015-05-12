@@ -1,0 +1,4 @@
+
+snmp_host l3-bg-6
+  snmp_community  kwefff9h
+  include_file    /opt/openac/etc/snmp/templates/cisco_catalyst

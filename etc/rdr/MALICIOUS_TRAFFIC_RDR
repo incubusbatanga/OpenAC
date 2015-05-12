@@ -1,0 +1,15 @@
+
+rdr MALICIOUS_TRAFFIC_RDR tag 0xF0F0F050
+    rdr_field ATTACK_ID				1
+    rdr_field SUBSCRIBER_ID			2
+    rdr_field ATTACK_IP				3
+    rdr_field OTHER_IP				4
+    rdr_field PORT_NUMBER			5
+    rdr_field ATTACK_TYPE			6
+    rdr_field SIDE				7
+    rdr_field IP_PROTOCOL			8
+    rdr_field CONFIGURED_DURATION		9
+    rdr_field DURATION				10
+    rdr_field END_TIME				11
+    rdr_field ATTACKS				12
+    rdr_field MALICIOUS_SESSIONS		13

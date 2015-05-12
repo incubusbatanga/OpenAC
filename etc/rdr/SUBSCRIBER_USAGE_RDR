@@ -1,0 +1,15 @@
+
+rdr SUBSCRIBER_USAGE_RDR tag 0xF0F0F000
+    rdr_field SUBSCRIBER_ID 			1
+    rdr_field PACKAGE_ID			2
+    rdr_field SERVICE_USAGE_COUNTER_ID		3
+    rdr_field BREACH_STATE			4
+    rdr_field REASON				5
+    rdr_field CONFIGURED_DURATION		6
+    rdr_field DURATION				7
+    rdr_field END_TIME				8
+    rdr_field UPSTREAM_VOLUME			9
+    rdr_field DOWNSTREAN_VOLUME			10
+    rdr_field SESSIONS				11
+    rdr_field SECONDS				12
+

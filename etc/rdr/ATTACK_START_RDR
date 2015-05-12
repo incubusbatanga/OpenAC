@@ -1,0 +1,14 @@
+
+rdr ATTACK_START_RDR tag 0xF0F0F019
+    rdr_field ATTACK_ID				1
+    rdr_field SUBSCRIBER_ID			2
+    rdr_field ATTACKING_IP			3
+    rdr_field ATTACKED_IP			4
+    rdr_field ATTACKED_PORT			5
+    rdr_field ATTACKING_SIDE			6
+    rdr_field IP_PROTOCOL			7
+    rdr_field ATTACK_TYPE			8
+    rdr_field GENERATOR_ID			9
+    rdr_field ATTACK_TIME			10
+    rdr_field REPORT_TIME			11
+

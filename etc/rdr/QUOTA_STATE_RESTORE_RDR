@@ -1,0 +1,7 @@
+
+rdr QUOTA_STATE_RESTORE_RDR tag 0xF0F0F032
+    rdr_field SUBSCRIBER_ID			1
+    rdr_field PACKAGE_ID			2
+    rdr_field RDR_REASON			3
+    rdr_field END_TIME				4
+

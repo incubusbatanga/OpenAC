@@ -1,0 +1,137 @@
+Versions	  Changes made
+----------------------------------------------------------------------------
+
+  0.05		- Improvement: Significant changes to SNMP collector module.
+		  OID data acquisition is now divorced from output record
+		  generation, which allows SNMP collection and record output
+		  to have very different frequencies. Collected data is
+		  retained in memory and sent to the main process on its own
+		  schedule.
+
+		  Also, it is now possible to generate multiple output
+		  record formats at the same time.
+
+		  Each OID uses it's own poll interval if defined. Otherwise,
+		  it will use host-wide default.
+
+		- New feature: added RDR collector module.
+
+  0.04		- New feature: added SNMP collector module. Fully functional
+		  but requires a bit more work.
+
+		- Minor fixes and tweaks all over.
+
+  0.03		- Architecture change: all communication between main process
+		  and modules in both directions is now fully message based:
+
+		   * modules send MSG_RECORD and MSG_KEEPALIVE messages
+		     and receive MSG_RECORD and MSG_CONFIG messages
+		   * main process sends MSG_RECORD and MSG_CONFIG messages
+		     and receives MSG_RECORD and MSG_KEEPALIVE messages
+
+		- Architecture change: reworked HUP handling to make things
+		  more robust. No change should result in data loss during
+		  reconfiguration - processing buffered record data should
+		  resume once reconfiguration is done. Only critical changes
+		  like address/port change should interrupt data acquisition
+		  and even then only briefly. All changes should be applied
+		  on the fly.
+
+		  Sending HUP to the main process no longer restarts configured
+		  modules. Instead, new configuration is loaded and previous
+		  configuration is gracefully replaced, modules removed from
+		  configuration are shut down, newly introduced modules are
+		  spawned and the rest are reconfigured.
+
+		  Configuration is loaded and parsed only by the main process.
+		  Module instance configuration is delivered to child processes
+		  in serialized format via MSG_CONFIG messages. Once instance
+		  configuration has been replaced, reinitialize() method is
+		  invoked if module implements it (and considering the above
+		  said - it should).
+
+		  Note that concept of reinitialize() method was always to
+		  allow modules to be HUPed individually, without signaling
+		  the main process. The goal was to enable users to force
+		  modules that depend on external sources for their operational
+		  parameters or do caching or precalculations to refresh their
+		  metadata. Method didn't play a significant role in config
+		  reloads since child processes were fully shut down/respawned
+		  on main process HUP, so the bulk of module specific init
+		  code usually ended up in initialize() method invoked on
+		  every child process spawn. With this architecture change,
+		  reinitialize() method became a significant component of
+		  the instance reconfiguration process as more module specific
+		  init code has to be executed on each main process HUP,
+		  which requires more code to be moved from initialize() to
+		  reinitialize().
+
+		  In effect, sending HUP to the main process will ultimately
+		  result in invoking the reinitialize() with new configuration,
+		  while sending HUP to the individual child process will again
+		  result in invoking the reinitialize() method, only without
+		  any configuration change. This means that the new concept
+		  does not replace the old one, but expands it. Sending HUP
+		  to the individual child process can still trigger it's
+		  refresh mechanisms while the rest of init code remains
+		  dormant in the absence of configuration changes.
+
+		- API change: added due() method to api::util::lru to allow
+		  callers to determine the remaining time until expiration
+		  of an object in the LRU cache.
+
+		- API change: renamed timer() method to firstdue() in
+		  api::util::lru. This method was introduced in v0.01
+		  when module was ported from OpenLB. It's purpose is to
+		  allow callers to determine the time (in seconds) until
+		  next (the oldest) object expires from the LRU cache.
+
+		- API change: added modify_xxxx_event() methods to event
+		  engine api::util::event to allow modification of parameters
+		  of registered events and save module writers some dirty
+		  work.
+
+  0.02		- Architecture change: unified module design by getting rid
+		  of collector-backend-loopback paradigm. Since introduction
+		  of loopback modules (OpenLB), collector and backend modules
+		  became obsolete as loopbacks provided functionality of both.
+		  OpenAC inherited this design along with the rest of OpenLB's
+		  framework.
+
+		  Collector and backend modules no longer exist. Instead, all
+		  modules are now essentially loopback modules, only the name
+		  has changed and term loopback is no longer used.
+
+		  Method process() is no longer mandatory and it is up to
+		  modules to define it if they have to receive and process
+		  input from the main process. Typically, modules that do
+		  collection won't need process() method (ex. collector
+		  modules). Unlike those, modules that store data (ex. backend
+		  modules) or do intermediate data processing (ex. loopback
+		  modules) must first receive it from the main process. Thus,
+		  they must define process() method.
+
+		  To conclude - all modules are now architecturally the same
+		  and they are called just 'modules'.
+
+		- Improvement: all communication between main process and
+		  modules in both directions is buffered to improve reliability.
+
+		  Records produced by a module are queued and asynchronosly
+		  delivered to the main process via pipe by a queue runner
+		  which honors pipe's I/O readiness states.
+
+		  Records received by the main process are placed into the input
+		  queue and then asynchronosly dispatched to destination modules
+		  by moving them to appropriate output queues which are also
+		  flushed asynchronosly.
+
+		  Records received by a module are placed into module's input
+		  queue and asynchronosly dequeued and processed.
+
+  0.01		- Initial release based on framework taken from OpenLB.
+		  Significant changes were made to the framework and
+		  eventually, they will be ported back to OpenLB.
+
+		  Most notable changes are fixes and improvements made
+		  to the event engine api::util::event

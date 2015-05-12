@@ -1,0 +1,4 @@
+
+snmp_host ts-bg-29
+  snmp_community  kwefff9h
+  include_file    /opt/openac/etc/snmp/templates/cisco_lns

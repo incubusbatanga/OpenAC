@@ -1,0 +1,9 @@
+
+rdr QUOTA_THRESHOLD_RDR tag 0xF0F0F031
+    rdr_field SUBSCRIBER_ID			1
+    rdr_field PACKAGE_ID			2
+    rdr_field BUCKET_ID				3
+    rdr_field GLOBAL_THRESHOLD			4
+    rdr_field END_TIME				5
+    rdr_field BUCKET_QUOTA			6
+

@@ -1,0 +1,101 @@
+
+#
+# General per-host parameters
+#
+ default_poll_interval 300
+ snmp_query_timeout 1
+ snmp_query_attempts 1
+
+#
+# SNMP tables that hold indexes used in other queries
+#
+#  These tables are used as sources of indexes into other tables.
+#  Given table OID will be walked and it's entry values will be
+#  matched against configured indexes' regexps. Each entry that
+#  produces a match will be used as an index into various parts
+#  of the SNMP tree, other tables. A single table_index can hold 
+#  entire series of indexes produced by matching table entries'
+#  values against specified regexp. Specified index series is
+#  then used in indexed OIDs (if any) referenced by data record
+#  definition to produce a series of records, one for each index
+#  stored under specified table_index name. Naturally, if record
+#  definitions don't reference any indexed OID, assigning them
+#  table indexes has no effect (other than uneccessary iterations
+#  over entire index series) and therefore makes no sense.
+#
+ snmp_table .1.3.6.1.2.1.2.2.1.2 size_from .1.3.6.1.2.1.2.1.0
+   table_refresh 3600
+   table_index ifIndex matching ^([Gg]igabit[Ee]thernet|[Pp]ort(\\-)?[Cc]hannel|[Vv]lan)\\s*\\d+(\\/\\d+)?$
+
+#
+# SNMP OIDs whose data we retrieve from monitored devices
+#
+#  These are our data sources. Each datasource is identified by
+#  its unique name. It has a defined value type, SNMP OID in ASN1
+#  format and an index, if specified OID is indexed (a table OID).
+#
+#  Type 'gauge' is used for values that directly reflect the 
+#  current status of some property and, therefore, are not
+#  cumulative (ie. CPU load, temperature, number of sessions,...).
+#
+#  Type 'counter' is used for values that reflect the status
+#  of some property historically - they accumulate over time,
+#  so each reading can only yield a value greater or equal to
+#  the previously read value (ie. bytes in, bytes out, ...)
+#
+#  Type 'string' is usualy used to identify resources that are
+#  the source of data. These values can be used in filters or
+#  data formatting in other modules or in global assignment rules
+#  or can be stored as descriptions ...
+#
+ snmp_oid counter ifInOctets .1.3.6.1.2.1.2.2.1.10 index ifIndex every 1
+ snmp_oid counter ifOutOctets .1.3.6.1.2.1.2.2.1.16 index ifIndex every 1
+ snmp_oid string ifName .1.3.6.1.2.1.2.2.1.2 index ifIndex
+
+#
+# Record fields that we format using SNMP data retrieved from OIDs
+#
+#  Each field is given a name, an operator and an expression 
+#  that will be evaluated into a single value.
+#
+#  Expressions can use one of the following types of variables:
+#
+#  1. variables prefixed with '$' represent values of previosly
+#     defined OIDs. 
+#
+#  2. variables prefixed with '%' are internal variables:
+#       %time    - current UNIX timestamp
+#       %host    - target host
+#	%index	 - current table index if specified
+#
+#  First, variables will be replaced with their respective values
+#  and then, the expression will be evaluated. If referenced OID
+#  variables are table OIDs, current index, provided by the record 
+#  formatter's iterator, will be appended to produce the value of
+#  the table entry with current table index. Finally, fields will
+#  be assigned produced values.
+#
+ snmp_record_field timestamp    %time
+ snmp_record_field host         %host
+ snmp_record_field interface    $ifName
+ snmp_record_field octets_in    $ifInOctets
+ snmp_record_field octets_out   $ifOutOctets
+
+#
+# Specification of the output data record format.
+#
+# Here, one or more output records are defined. They are generated
+# asynchronosly to data acquisition, every N seconds, as specified
+# by 'every' keyword.
+#
+# Optional 'index' keyword references a table_index (provided by
+# one of configured tables) that will be used to iterate over any
+# table OID referenced by record fields' expressions.
+#
+# Mandatory 'format' keyword specifies data fields that constitute
+# a record. Field names specified here refer to snmp_record_fields
+# that define expressions that produce record field values on each
+# run. They must be specified in the order in which they are supposed
+# to be delivered to the main process.
+#
+ generate_snmp_record interface_traffic every 300 index ifIndex format timestamp host interface octets_in octets_out

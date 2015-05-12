@@ -1,0 +1,4 @@
+
+snmp_host belgrade2
+  snmp_community  kwefff9h
+  include_file    /opt/openac/etc/snmp/templates/cisco_router

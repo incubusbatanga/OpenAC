@@ -1,0 +1,18 @@
+
+rdr BLOCKING_RDR tag 0xF0F0F040
+    rdr_field SUBSCRIBER_ID			1
+    rdr_field PACKAGE_ID			2
+    rdr_field SERVICE_ID			3
+    rdr_field PROTOCOL_ID			4
+    rdr_field CLIENT_IP				5
+    rdr_field CLIENT_PORT			6
+    rdr_field SERVER_IP				7
+    rdr_field SERVER_PORT			8
+    rdr_field INITIATING_SIDE			9
+    rdr_field ACCESS_STRING			10
+    rdr_field INFO_STRING			11
+    rdr_field BLOCK_REASON			12
+    rdr_field BLOCK_RDR_COUNT			13
+    rdr_field REDIRECTED			14
+    rdr_field REPORT_TIME			15
+

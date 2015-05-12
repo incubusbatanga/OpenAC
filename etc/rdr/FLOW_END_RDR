@@ -1,0 +1,17 @@
+
+rdr FLOW_END_RDR tag 0xF0F0F018
+    rdr_field SUBSCRIBER_ID			1
+    rdr_field PACKAGE_ID			2
+    rdr_field SERVICE_ID			3
+    rdr_field IP_PROTOCOL			4
+    rdr_field SERVER_IP				5
+    rdr_field SERVER_PORT			6
+    rdr_field CLIENT_IP				7
+    rdr_field CLIENT_PORT			8
+    rdr_field INITIATING_SIDE			9
+    rdr_field START_TIME			10
+    rdr_field REPORT_TIME			11
+    rdr_field BREACH_STATE			12
+    rdr_field FLOW_ID				13
+    rdr_field GENERATOR_ID			14
+

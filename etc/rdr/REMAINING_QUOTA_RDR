@@ -1,0 +1,24 @@
+
+rdr REMAINING_QUOTA_RDR tag 0xF0F0F030
+    rdr_field SUBSCRIBER_ID			1
+    rdr_field PACKAGE_ID			2
+    rdr_field RDR_REASON			3
+    rdr_field END_TIME				4
+    rdr_field REMAINING_QUOTA_1			5
+    rdr_field REMAINING_QUOTA_2			6
+    rdr_field REMAINING_QUOTA_3			7
+    rdr_field REMAINING_QUOTA_4			8
+    rdr_field REMAINING_QUOTA_5			9
+    rdr_field REMAINING_QUOTA_6			10
+    rdr_field REMAINING_QUOTA_7			11
+    rdr_field REMAINING_QUOTA_8			12
+    rdr_field REMAINING_QUOTA_9			13
+    rdr_field REMAINING_QUOTA_10		14
+    rdr_field REMAINING_QUOTA_11		15
+    rdr_field REMAINING_QUOTA_12		16
+    rdr_field REMAINING_QUOTA_13		17
+    rdr_field REMAINING_QUOTA_14		18
+    rdr_field REMAINING_QUOTA_15		19
+    rdr_field REMAINING_QUOTA_16		20
+    rdr_field TOTAL_VOLUME_USAGE		21
+

@@ -1,0 +1,25 @@
+
+rdr DHCP_RDR tag 0xF0F0F042
+    rdr_field CPE_MAC				1
+    rdr_field CMTS_IP				2
+    rdr_field ASSIGNED_IP			3
+    rdr_field RELEASED_IP			4
+    rdr_field TRANSACTION_ID			5
+    rdr_field MESSAGE_TYPE			6
+    rdr_field OPTION_TYPE_0			7
+    rdr_field OPTION_TYPE_1			8
+    rdr_field OPTION_TYPE_2			9
+    rdr_field OPTION_TYPE_3			10
+    rdr_field OPTION_TYPE_4			11
+    rdr_field OPTION_TYPE_5			12
+    rdr_field OPTION_TYPE_6			13
+    rdr_field OPTION_TYPE_7			14
+    rdr_field OPTION_TYPE_0_DATA		15
+    rdr_field OPTION_TYPE_1_DATA		16
+    rdr_field OPTION_TYPE_2_DATA		17
+    rdr_field OPTION_TYPE_3_DATA		18
+    rdr_field OPTION_TYPE_4_DATA		19
+    rdr_field OPTION_TYPE_5_DATA		20
+    rdr_field OPTION_TYPE_6_DATA		21
+    rdr_field OPTION_TYPE_7_DATA		22
+

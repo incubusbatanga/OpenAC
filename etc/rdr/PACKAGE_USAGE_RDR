@@ -1,0 +1,16 @@
+
+rdr PACKAGE_USAGE_RDR tag 0xF0F0F004
+    rdr_field PACKAGE_COUNTER_ID		1
+    rdr_field GENERATOR_ID			2
+    rdr_field SERVICE_USAGE_COUNTER_ID		3
+    rdr_field CONFIGURED_DURATION		4
+    rdr_field DURATION				5
+    rdr_field END_TIME				6
+    rdr_field UPSTREAM_VOLUME			7
+    rdr_field DOWNSTREAM_VOLUME			8
+    rdr_field SESSIONS				9
+    rdr_field SECONDS				10
+    rdr_field CONCURRENT_SESSIONS		11
+    rdr_field ACTIVE_SUBSCRIBERS		12
+    rdr_field TOTAL_ACTIVE_SUBSCRIBERS		13
+
