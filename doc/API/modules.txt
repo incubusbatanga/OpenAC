@@ -1,0 +1,106 @@
+
+OpenAC modules are Perl packages implementing object methods that OpenAC
+daemon expects to find and call in different phases of data processing.
+Modules can collect, manipulate and write data.
+
+Modules that collect data are called collectors. They receive input by
+any means and deliver it to the core daemon.
+
+Modules that write data are called backends. They receive data from core
+daemon and deliver it to their final destination by various means.
+
+Modules that process data are called processors. They receive data from
+core daemon, process it, transform it and deliver the results back to 
+the core daemon.
+
+This classification of modules is just symbolic. Modules are free to
+implement and combine any sort of functionality within provided module
+API specification. Which feature of a single module is activated and used
+depends on the configuration.
+
+
+All modules inherit from api::module base class. Some methods are mandatory
+and modules cannot be succesfully initiated without them. Others are optional
+and will be used if present. Otherwise, OpenAC will provide the default
+behavior.
+
+A module MUST implement following common methods:
+
+ conf_template_hashref = register(mod_class_name)
+
+    Called without parameters (except implied $self, of course),
+    when module is first loaded.
+
+    If module requires configuration, register() should return a hashref
+    to configuration template in Config::ContextSensitive format.
+
+    If no configuration is neccessary, register() should return undef.
+
+
+ mod_objref = instantiate(mod_class_name, mod_instance_conf_hashref)
+
+    Called before OpenAC queues module to be spawned as a child process.
+
+    This is actually a constructor method. It must return bless()-ed
+    reference to itself. Although it is not required, it is recommended
+    to bless() the hash reference to it's configuration received as
+    input parameter.
+
+    It must return reference to the module object, or undef on failure.
+
+    Even though this is technically a mandatory method, api::module base
+    class implements the most basic instantiate method that all modules
+    inherit,  so they have to implement it only if they need to override
+    the default behaviour.
+
+A module CAN implement following common methods:
+
+ instdata_hashref = daemonize(self)
+
+    Called immediately after spawning child processes to set up instance
+    specific data.
+
+    It must return a hash reference to the instance specific data storage
+    or undef on failure.
+
+    Default daemonize method is provided by api::module base class.
+
+ instdata_hashref = initialize(self, instdata_hashref)
+
+    Called once, after module instance child process has been fully set up,
+    to perform module-specific initialization - create objects, prepare
+    buffers, load additional files, etc.
+
+    It must return a hash reference to the instance specific data storage
+    or undef on failure. Therefore it has a chance to replace instance
+    data storage provided by daemonize(), if necessary for whatever reason.
+
+ instdata_hashref = reinitialize(self, instdata_hashref)
+
+    Called every time core daemon receives HUP signal after configuration
+    has been reloaded to perform module-specific re-initialization.
+
+    It must return a hash reference to the instance specific data storage
+    or undef on failure. Therefore it has a chance to replace instance
+    data storage provided by daemonize() or initialize().
+
+ cleanup(self, instdata_hashref)
+
+    Called when OpenAC receives SIGTERM or SIGINT signal, after main runloop
+    terminates, to perform module instance specific cleanup.
+
+
+There is also a number of common accessor (getter/setter) methods whose
+purpose is to manipulate internal module parameters:
+
+get_initialize_timeout() and set_initialize_timeout()
+get_initialize_attempts() and set_initialize_attempts()
+get_reinitialize_timeout() and set_reinitialize_timeout()
+get_reinitialize_attempts() and set_reinitialize_attempts()
+get_abort_timeout() and set_abort_timeout()
+get_abort_attempts() and set_abort_attempts()
+get_cleanup_timeout() and set_cleanup_timeout()
+get_cleanup_attempts() and set_cleanup_attempts()
+
+These methods allow modules to override default global method timeouts
+and max invocation attempts limit on a per-method basis.
